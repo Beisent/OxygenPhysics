@@ -1,0 +1,8 @@
+[
+{
+  "directory": "F:/C++/OxygenPhysics/build",
+  "command": "c:\\mingw64\\bin\\g++.exe  @CMakeFiles/OxygenRenderExample.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\OxygenRenderExample.dir\\tests\\main.cpp.obj -c F:\\C++\\OxygenPhysics\\tests\\main.cpp",
+  "file": "F:/C++/OxygenPhysics/tests/main.cpp",
+  "output": "CMakeFiles/OxygenRenderExample.dir/tests/main.cpp.obj"
+}
+]

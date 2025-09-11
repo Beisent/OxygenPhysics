@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\OxygenRenderExample.dir/objects.a
+C:\mingw64\bin\ar.exe qc CMakeFiles\OxygenRenderExample.dir/objects.a @CMakeFiles\OxygenRenderExample.dir\objects1.rsp
+c:\mingw64\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\OxygenRenderExample.dir/objects.a -Wl,--no-whole-archive -o F:\C++\OxygenPhysics\bin\OxygenRenderExample.exe -Wl,--out-implib,libOxygenRenderExample.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\OxygenRenderExample.dir\linkLibs.rsp
