@@ -14,17 +14,21 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/vendor
 
     ${CMAKE_SOURCE_DIR}/tests
+    ${CMAKE_SOURCE_DIR}/OxygenPhysics/include
 )
+add_subdirectory(${CMAKE_SOURCE_DIR}/vendor/entt)
 
 # 自动收集源文件
-file(GLOB SOURCES 
+file(GLOB SOURCES
     ${CMAKE_SOURCE_DIR}/OxygenPhysics/src/*.cpp
+    ${CMAKE_SOURCE_DIR}/OxygenPhysics/utils/*.cpp
     ${CMAKE_SOURCE_DIR}/tests/*.cpp
 )
 
 add_executable(OxygenRenderExample ${SOURCES})
 
-target_link_libraries(OxygenRenderExample 
+target_link_libraries(OxygenRenderExample
     ${CMAKE_SOURCE_DIR}/bin/libOxygenRender.dll.a
+    EnTT::EnTT
     opengl32
 )

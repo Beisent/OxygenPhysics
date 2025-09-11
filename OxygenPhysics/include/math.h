@@ -5,6 +5,26 @@
 namespace OxyPhysics
 {
 
+    namespace Constants
+    {
+        constexpr float PI = 3.14159265358979323846f;
+        constexpr float TWO_PI = 2.0f * PI;
+        constexpr float HALF_PI = 0.5f * PI;
+        constexpr float DEG2RAD = PI / 180.0f;
+        constexpr float RAD2DEG = 180.0f / PI;
+        constexpr float EPSILON = 1e-6f;
+    } // namespace Constants
+
+    namespace MathTools
+    {
+        // ========== 角度和弧度的转换 ==========
+        constexpr float DegToRad(float deg) { return deg * Constants::DEG2RAD; }
+        constexpr float RadToDeg(float rad) { return rad * Constants::RAD2DEG; }
+        constexpr float DegToRad(int deg) { return deg * Constants::DEG2RAD; }
+    } // MathTools
+
+    
+    // ========== 二维向量 ==========
     struct Vec2
     {
         float x = 0.0f;
@@ -71,7 +91,7 @@ namespace OxyPhysics
         Vec2 normalize() const
         {
             float len = length();
-            if (len < 1e-6f)
+            if (len < Constants::EPSILON)
                 return {0, 0};
             return {x / len, y / len};
         }
@@ -79,7 +99,7 @@ namespace OxyPhysics
         void normalizeSelf()
         {
             float len = length();
-            if (len < 1e-6f)
+            if (len < Constants::EPSILON)
             {
                 x = y = 0;
                 return;
