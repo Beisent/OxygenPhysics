@@ -3,20 +3,29 @@ project(OxygenRenderExample)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin) 
+
+set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/OxygenPhysics/include)
+set(VENDOR_DIR ${CMAKE_SOURCE_DIR}/vendor)
+set(TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
 
 # 包含头文件目录
 include_directories(
-    ${CMAKE_SOURCE_DIR}/vendor/OxygenRender
-    ${CMAKE_SOURCE_DIR}/vendor/glm
-    ${CMAKE_SOURCE_DIR}/vendor/glfw
-    ${CMAKE_SOURCE_DIR}/vendor/GLAD
-    ${CMAKE_SOURCE_DIR}/vendor
+    ${VENDOR_DIR}/OxygenRender
+    ${VENDOR_DIR}/glm
+    ${VENDOR_DIR}/glfw
+    ${VENDOR_DIR}/GLAD
+    ${VENDOR_DIR}
 
-    ${CMAKE_SOURCE_DIR}/tests
-    ${CMAKE_SOURCE_DIR}/OxygenPhysics/include
+    ${TEST_DIR}
+    ${INCLUDE_DIR}
+    ${INCLUDE_DIR}/Components
+    ${INCLUDE_DIR}/Common
+    ${INCLUDE_DIR}/Factories
+
+
 )
-add_subdirectory(${CMAKE_SOURCE_DIR}/vendor/entt)
+add_subdirectory(${VENDOR_DIR}/entt)
 
 # 自动收集源文件
 file(GLOB SOURCES
