@@ -7,12 +7,12 @@ namespace OxyPhysics
 {
     struct Circle
     {
-        double radius{10.0};
+        real radius{10.0};
     };
 
     struct Box
     {
-        double size{10.0};
+        real size{10.0};
     };
 
     struct Polygon
@@ -32,7 +32,7 @@ namespace OxyPhysics
     {
         ShapeType type;
         Vec2 localPosition{0, 0};
-        double localRotation{0.0};
+        real localRotation{0.0};
         Circle circle;
         Box box;
         Polygon polygon;

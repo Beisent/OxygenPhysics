@@ -1,7 +1,6 @@
 #pragma once
 #include <queue>
 #include <variant>
-#include <glm/vec2.hpp>
 #include <unordered_map>
 #include <functional>
 #include "OxygenRender/GraphicsTypes.h"
@@ -125,13 +124,14 @@ namespace OxyRender
     // MouseScroll事件数据结构体
     struct MouseScrollEvent
     {
-        float xoffset;
-        float yoffset;
+        float xOffset;
+        float yOffset;
     };
     // MouseMove事件数据结构体
     struct MouseMoveEvent
     {
-        glm::vec2 position;
+        float positionX;
+        float positionY;
     };
 
     // WindowResize事件数据结构体
@@ -180,7 +180,12 @@ namespace OxyRender
         bool isKeyDown(KeyCode key);
         bool isMouseButtonDown(MouseCode button);
 
-        glm::vec2 handleMouseMoved(const MouseMoveEvent &mouse);
+        struct MouseDelta
+        {
+            float dx;
+            float dy;
+        };
+        MouseDelta handleMouseMoved(const MouseMoveEvent &mouse);
         void resetMouse();
     };
 }

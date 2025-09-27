@@ -4,10 +4,8 @@
 #include "OxygenRender/Shader.h"
 #include "OxygenRender/Buffer.h"
 #include "OxygenRender/Camera.h"
+#include "OxygenRender/OxygenMathLite.h"
 #include <vector>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/constants.hpp>
 #include <cmath>
 #include <functional>
 
@@ -22,49 +20,56 @@ namespace OxyRender
         Camera &getCamera();
         void clear();
         void setClearColor(const OxyColor &color);
+        void setShader(Shader *shader) { m_customShader = shader; }
         void begin();
 
-        void drawTriangle(const glm::vec3 &p1,
-                          const glm::vec3 &p2,
-                          const glm::vec3 &p3,
+        void drawTriangle(const MathLite::Vec3 &p1,
+                          const MathLite::Vec3 &p2,
+                          const MathLite::Vec3 &p3,
                           OxyColor color = {1, 1, 1, 1});
 
-        void drawLine(const glm::vec3 &p1,
-                      const glm::vec3 &p2,
+        void drawLine(const MathLite::Vec3 &p1,
+                      const MathLite::Vec3 &p2,
                       OxyColor color = {1, 1, 1, 1},
                       float thickness = 1.0f);
 
-        void drawPoints(const std::vector<glm::vec3> &points,
+        void drawPoints(const std::vector<MathLite::Vec3> &points,
                         float size,
                         const OxyColor &color);
 
-        void drawPlane(const glm::vec3 &center, const glm::vec3 &normal, const glm::vec2 &size, const OxyColor &color);
+        void drawPlane(const MathLite::Vec3 &center, const MathLite::Vec3 &normal, const MathLite::Vec2 &size, const OxyColor &color);
 
-        void drawBox(const glm::vec3 &center,
-                     const glm::vec3 &size,
+        void drawBox(const MathLite::Vec3 &center,
+                     const MathLite::Vec3 &size,
                      const OxyColor &color = {0.8f, 0.2f, 0.2f, 1.0f});
 
-        void drawSphere(const glm::vec3 &center,
+        void drawSphere(const MathLite::Vec3 &center,
                         float radius,
                         int stacks = 16,
                         int slices = 24,
                         const OxyColor &color = {0.2f, 0.6f, 0.9f, 1.0f});
         void drawFunction(
-            const glm::vec2 &xValues,
-            const glm::vec2 &yValues,
+            const MathLite::Vec2 &xValues,
+            const MathLite::Vec2 &yValues,
             const std::function<float(float, float)> &func,
             const OxyColor &color = {0.2f, 0.6f, 0.9f, 1.0f},
             const float &dx = 0.1f,
             const float &dy = 0.1f);
+        void drawCylinder(const MathLite::Vec3 &center,
+                          float radius,
+                          float height,
+                          int slices,
+                          const OxyColor &color,
+                          bool capped);
 
         void flush();
 
     private:
         struct Vertex
         {
-            glm::vec3 pos;
+            MathLite::Vec3 pos;
             OxyColor color;
-            glm::vec3 normal;
+            MathLite::Vec3 normal;
         };
 
         struct LineBatch
@@ -86,6 +91,7 @@ namespace OxyRender
         Renderer &m_renderer;
         Camera m_camera;
         Shader m_shader;
+        Shader *m_customShader = nullptr;
 
         VertexArray m_vao;
         Buffer m_vbo;
@@ -103,7 +109,7 @@ namespace OxyRender
         std::vector<PointBatch> m_pointBatches;
 
         // 硬编码的着色器源码
-        static const char* m_vertexShaderSrc;
-        static const char* m_fragmentShaderSrc;
+        static const char *m_vertexShaderSrc;
+        static const char *m_fragmentShaderSrc;
     };
 }
