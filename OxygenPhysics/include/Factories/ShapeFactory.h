@@ -1,13 +1,12 @@
 ﻿#pragma once
 #include "ShapeComponent.h"
-
 namespace OxyPhysics
 {
     class ShapeFactory
     {
     public:
         // 创建圆形
-        static ShapeComponent CreateCircle(double radius, const Vec2& localPos = {0,0})
+        static ShapeComponent CreateCircle(real radius, const Vec2& localPos = {0,0})
         {
             Circle c{radius};
             ShapeComponent shape(c);
@@ -16,7 +15,7 @@ namespace OxyPhysics
         }
 
         // 创建方形/Box
-        static ShapeComponent CreateBox(double size, const Vec2& localPos = {0,0})
+        static ShapeComponent CreateBox(real size, const Vec2& localPos = {0,0})
         {
             Box b{size};
             ShapeComponent shape(b);

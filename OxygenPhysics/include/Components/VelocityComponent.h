@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "OxyMathLite.h"
+using namespace OxygenMathLite;
 namespace OxyPhysics
 {
     struct VelocityComponent
