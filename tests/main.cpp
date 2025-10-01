@@ -20,11 +20,15 @@ int main()
     PhysicsWorld world;
 
     // 创建几个物体
-    auto circle = world.CreateCircleBody({0.0f, 0.0f}, 50.0f);
-    auto box = world.CreateBoxBody({50.0f, 100.0f}, 80.0f);
-    Polygon poly;
-    poly.vertices = {{0,50},{-50,-50},{50,-50}};
-    auto polygon = world.CreatePolygonBody({-100.0f, -100.0f}, poly.vertices);
+    BodyDef body;
+    body.position = Vec2(0, 0);
+    body.velocity = Vec2(0, 10);
+    body.mass = 1.0;
+    body.isStatic = false;
+    
+    auto circle = ShapeFactory::CreateCircle(10.0);
+    world.CreateRigid(body, circle);
+
 
     // 创建调试渲染器
     PhysicsDebugDraw debugDraw(world, graphics2D);

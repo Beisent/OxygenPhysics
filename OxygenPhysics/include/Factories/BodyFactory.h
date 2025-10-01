@@ -13,10 +13,10 @@ namespace OxyPhysics
         real mass{1.0};
         bool isStatic{false};
     };
-    class BodyFactory
+    class RigidFactory
     {
     public:
-        static entt::entity CreateBody(entt::registry &registry, const BodyDef &def, const ShapeComponent &shape)
+        static entt::entity CreateRigid(entt::registry &registry, const BodyDef &def, const ShapeComponent &shape)
         {
             auto e = registry.create();
 
@@ -42,7 +42,7 @@ namespace OxyPhysics
             return e;
         }
 
-        static void DestroyBody(entt::registry &registry, entt::entity e)
+        static void DestroyRigid(entt::registry &registry, entt::entity e)
         {
             if (registry.valid(e))
             {

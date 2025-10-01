@@ -1,9 +1,9 @@
 ﻿#include "World.h"
 #include "Components/Components.h"
-#include "Factories/Factories.h"
+
 namespace OxyPhysics
 {
-    entt::entity PhysicsWorld::CreateCircleBody(const Vec2 &position, real radius, real mass, bool isStatic)
+    entt::entity PhysicsWorld::CreateCircleRigid(const Vec2 &position, real radius, real mass, bool isStatic)
     {
         BodyDef def;
         def.position = position;
@@ -11,9 +11,9 @@ namespace OxyPhysics
         def.isStatic = isStatic;
 
         auto shape = ShapeFactory::CreateCircle(radius);
-        return BodyFactory::CreateBody(registry, def, shape);
+        return RigidFactory::CreateRigid(registry, def, shape);
     }
-    entt::entity PhysicsWorld::CreateBoxBody(const Vec2 &position, real size, real mass, bool isStatic)
+    entt::entity PhysicsWorld::CreateBoxRigid(const Vec2 &position, real size, real mass, bool isStatic)
     {
         BodyDef def;
         def.position = position;
@@ -21,9 +21,9 @@ namespace OxyPhysics
         def.isStatic = isStatic;
 
         auto shape = ShapeFactory::CreateBox(size);
-        return BodyFactory::CreateBody(registry, def, shape);
+        return RigidFactory::CreateRigid(registry, def, shape);
     }
-    entt::entity PhysicsWorld::CreatePolygonBody(const Vec2 &position, const std::vector<Vec2> &vertices, real mass, bool isStatic)
+    entt::entity PhysicsWorld::CreatePolygonRigid(const Vec2 &position, const std::vector<Vec2> &vertices, real mass, bool isStatic)
     {
         BodyDef def;
         def.position = position;
@@ -31,12 +31,16 @@ namespace OxyPhysics
         def.isStatic = isStatic;
 
         auto shape = ShapeFactory::CreatePolygon(vertices);
-        return BodyFactory::CreateBody(registry, def, shape);
+        return RigidFactory::CreateRigid(registry, def, shape);
     }
 
-    void PhysicsWorld::DestroyBody(entt::entity e)
+    entt::entity PhysicsWorld::CreateRigid(const BodyDef &def, const ShapeComponent &shape)
     {
-        BodyFactory::DestroyBody(registry, e);
+        return RigidFactory::CreateRigid(registry, def, shape);
+    }
+    void PhysicsWorld::DestroyRigid(entt::entity e)
+    {
+        RigidFactory::DestroyRigid(registry, e);
     }
 
     // 物理步进
