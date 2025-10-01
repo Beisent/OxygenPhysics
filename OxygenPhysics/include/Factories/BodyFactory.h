@@ -2,6 +2,7 @@
 #include <entt/entt.hpp>
 #include "Components/Components.h"
 #include "Factories/ShapeFactory.h"
+#include "Common/InertiaCalculate.h"
 namespace OxyPhysics
 {
     struct BodyDef
@@ -15,14 +16,26 @@ namespace OxyPhysics
     class BodyFactory
     {
     public:
-        template <typename Shape>
-        static entt::entity CreateBody(entt::registry &registry, const BodyDef &def, const Shape &shape)
+        static entt::entity CreateBody(entt::registry &registry, const BodyDef &def, const ShapeComponent &shape)
         {
             auto e = registry.create();
 
             registry.emplace<TransformComponent>(e, def.position, def.angle);
             registry.emplace<VelocityComponent>(e, def.velocity);
-            registry.emplace<MassComponent>(e, def.mass, def.isStatic);
+            /*
+            real mass{1.0};
+            real invMass{1.0};
+            real inertia{1.0};
+            real invInertia{1.0};
+            bool isStatic{false};*/
+            MassComponent massComp;
+            massComp.mass = def.mass;
+            massComp.invMass = 1.0f / massComp.mass;
+            massComp.inertia = computeInertia(def.mass, shape);
+            massComp.invInertia = 1.0f / massComp.inertia;
+            massComp.isStatic = def.isStatic;
+
+            registry.emplace<MassComponent>(e, massComp);
 
             registry.emplace<ShapeComponent>(e, shape);
 
@@ -35,6 +48,23 @@ namespace OxyPhysics
             {
                 registry.destroy(e);
             }
+        }
+
+    private:
+        static real computeInertia(real mass, const ShapeComponent &shape)
+        {
+            switch (shape.type)
+            {
+            case ShapeType::Circle:
+                return InertiaCalculate::calculateCircle(mass, shape.circle.radius);
+            case ShapeType::Box:
+                return InertiaCalculate::calculateBox(mass, shape.box.size);
+            case ShapeType::Polygon:
+            {
+                return InertiaCalculate::calculatePolygon(mass, shape.polygon.vertices);
+            }
+            }
+            return 0.0f;
         }
     };
 }
