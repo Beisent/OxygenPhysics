@@ -17,8 +17,8 @@ namespace OxyPhysics
 
     struct Polygon
     {
-        std::vector<Vec2> vertices;
-        Polygon() { vertices.reserve(8); } // 默认最多8个顶点
+        std::vector<Vec2> vertices = {{0.0f,5.0f},{-5.0f,0.0f},{5.0f,0.0f}};
+        Polygon() {} 
     };
 
     enum class ShapeType : uint8_t

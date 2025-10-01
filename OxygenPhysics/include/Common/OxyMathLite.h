@@ -37,6 +37,10 @@ namespace OxygenMathLite
     }
 
     // ====================== Vec2 ======================
+    /**
+     * @brief 2D vector
+     * @details A 2D vector with x and y components.
+     */
     struct Vec2
     {
         real x = 0, y = 0;
@@ -683,115 +687,115 @@ namespace OxygenMathLite
         inline Vec2 RandomInsideUnitCircle() { return RandomUnitVector2() * std::sqrt(MathTools::RandomRange(0, 1.0f)); }
 
     }
-    // ====================== 2D 几何工具 ======================
-    namespace Geometry2D
-    {
+    // // ====================== 2D 几何工具 ======================
+    // namespace Geometry2D
+    // {
 
-        real Distance(const Vec2 &a, const Vec2 &b)
-        {
-            Vec2 d = a - b;
-            return d.length();
-        }
-        real DistanceSquared(const Vec2 &a, const Vec2 &b)
-        {
-            Vec2 d = a - b;
-            return d.lengthSquared();
-        }
-        Vec2 ClosestPointOnLineSegment(const Vec2 &a, const Vec2 &b, const Vec2 &p)
-        {
-            Vec2 ab = b - a;
-            real t = (p - a).dot(ab) / ab.lengthSquared();
-            t = MathTools::Clamp(t, 0, 1);
-            return a + ab * t;
-        }
-        real DistancePointToLine(const Vec2 &a, const Vec2 &b, const Vec2 &p)
-        {
-            Vec2 ab = b - a;
-            Vec2 ap = p - a;
+    //     real Distance(const Vec2 &a, const Vec2 &b)
+    //     {
+    //         Vec2 d = a - b;
+    //         return d.length();
+    //     }
+    //     real DistanceSquared(const Vec2 &a, const Vec2 &b)
+    //     {
+    //         Vec2 d = a - b;
+    //         return d.lengthSquared();
+    //     }
+    //     Vec2 ClosestPointOnLineSegment(const Vec2 &a, const Vec2 &b, const Vec2 &p)
+    //     {
+    //         Vec2 ab = b - a;
+    //         real t = (p - a).dot(ab) / ab.lengthSquared();
+    //         t = MathTools::Clamp(t, 0, 1);
+    //         return a + ab * t;
+    //     }
+    //     real DistancePointToLine(const Vec2 &a, const Vec2 &b, const Vec2 &p)
+    //     {
+    //         Vec2 ab = b - a;
+    //         Vec2 ap = p - a;
 
-            real crossProduct = std::abs(ab.cross(ap));
-            real lineLength = ab.length();
-            if (lineLength < Constants::Epsilon)
-            {
-                return ap.length();
-            }
-            return crossProduct / lineLength;
-        }
+    //         real crossProduct = std::abs(ab.cross(ap));
+    //         real lineLength = ab.length();
+    //         if (lineLength < Constants::Epsilon)
+    //         {
+    //             return ap.length();
+    //         }
+    //         return crossProduct / lineLength;
+    //     }
 
-        // 线段到线段的距离
-        real DistanceLineToLine(const Vec2 &a, const Vec2 &b, const Vec2 &c, const Vec2 &d)
-        {
-            Vec2 ab = b - a;
-            Vec2 cd = d - c;
+    //     // 线段到线段的距离
+    //     real DistanceLineToLine(const Vec2 &a, const Vec2 &b, const Vec2 &c, const Vec2 &d)
+    //     {
+    //         Vec2 ab = b - a;
+    //         Vec2 cd = d - c;
 
-            auto Cross = [](const Vec2 &u, const Vec2 &v)
-            {
-                return u.x * v.y - u.y * v.x;
-            };
+    //         auto Cross = [](const Vec2 &u, const Vec2 &v)
+    //         {
+    //             return u.x * v.y - u.y * v.x;
+    //         };
 
-            // 判断 q 是否在 pr 线段上
-            auto OnSegment = [](const Vec2 &p, const Vec2 &q, const Vec2 &r)
-            {
-                return (q.x >= std::min(p.x, r.x) - Constants::Epsilon &&
-                        q.x <= std::max(p.x, r.x) + Constants::Epsilon &&
-                        q.y >= std::min(p.y, r.y) - Constants::Epsilon &&
-                        q.y <= std::max(p.y, r.y) + Constants::Epsilon);
-            };
+    //         // 判断 q 是否在 pr 线段上
+    //         auto OnSegment = [](const Vec2 &p, const Vec2 &q, const Vec2 &r)
+    //         {
+    //             return (q.x >= std::min(p.x, r.x) - Constants::Epsilon &&
+    //                     q.x <= std::max(p.x, r.x) + Constants::Epsilon &&
+    //                     q.y >= std::min(p.y, r.y) - Constants::Epsilon &&
+    //                     q.y <= std::max(p.y, r.y) + Constants::Epsilon);
+    //         };
 
-            real d1 = Cross(cd, a - c);
-            real d2 = Cross(cd, b - c);
-            real d3 = Cross(ab, c - a);
-            real d4 = Cross(ab, d - a);
+    //         real d1 = Cross(cd, a - c);
+    //         real d2 = Cross(cd, b - c);
+    //         real d3 = Cross(ab, c - a);
+    //         real d4 = Cross(ab, d - a);
 
-            // 严格相交
-            if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
-                ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)))
-            {
-                return 0.0;
-            }
+    //         // 严格相交
+    //         if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
+    //             ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0)))
+    //         {
+    //             return 0.0;
+    //         }
 
-            if (std::abs(Cross(ab, cd)) < Constants::Epsilon)
-            {
-                if (std::abs(Cross(ab, c - a)) < Constants::Epsilon)
-                {
-                    // 共线
-                    if (OnSegment(a, c, b) || OnSegment(a, d, b) ||
-                        OnSegment(c, a, d) || OnSegment(c, b, d))
-                    {
-                        return 0.0;
-                    }
-                }
-                // 平行但不共线
-                return DistancePointToLine(a, b, c);
-            }
+    //         if (std::abs(Cross(ab, cd)) < Constants::Epsilon)
+    //         {
+    //             if (std::abs(Cross(ab, c - a)) < Constants::Epsilon)
+    //             {
+    //                 // 共线
+    //                 if (OnSegment(a, c, b) || OnSegment(a, d, b) ||
+    //                     OnSegment(c, a, d) || OnSegment(c, b, d))
+    //                 {
+    //                     return 0.0;
+    //                 }
+    //             }
+    //             // 平行但不共线
+    //             return DistancePointToLine(a, b, c);
+    //         }
 
-            // 不相交、不平行
-            real dist1 = DistancePointToLine(c, d, a);
-            real dist2 = DistancePointToLine(c, d, b);
-            real dist3 = DistancePointToLine(a, b, c);
-            real dist4 = DistancePointToLine(a, b, d);
+    //         // 不相交、不平行
+    //         real dist1 = DistancePointToLine(c, d, a);
+    //         real dist2 = DistancePointToLine(c, d, b);
+    //         real dist3 = DistancePointToLine(a, b, c);
+    //         real dist4 = DistancePointToLine(a, b, d);
 
-            return std::min(std::min(dist1, dist2), std::min(dist3, dist4));
-        }
+    //         return std::min(std::min(dist1, dist2), std::min(dist3, dist4));
+    //     }
 
-    }
+    // }
 
-    namespace Integration2D
-    {
-        // Euler 积分
-        inline void Euler(Vec2 &position, Vec2 &velocity, const Vec2 &acceleration, real dt)
-        {
-            velocity += acceleration * dt;
-            position += velocity * dt;
-        }
+    // namespace Integration2D
+    // {
+    //     // Euler 积分
+    //     inline void Euler(Vec2 &position, Vec2 &velocity, const Vec2 &acceleration, real dt)
+    //     {
+    //         velocity += acceleration * dt;
+    //         position += velocity * dt;
+    //     }
 
-        // RK2 积分
-        inline void RK2(Vec2 &position, Vec2 &velocity, const Vec2 &acceleration, real dt)
-        {
-            Vec2 v_mid = velocity + acceleration * (dt * 0.5f);
-            position += v_mid * dt;
-            velocity += acceleration * dt;
-        }
-    }
+    //     // RK2 积分
+    //     inline void RK2(Vec2 &position, Vec2 &velocity, const Vec2 &acceleration, real dt)
+    //     {
+    //         Vec2 v_mid = velocity + acceleration * (dt * 0.5f);
+    //         position += v_mid * dt;
+    //         velocity += acceleration * dt;
+    //     }
+    // }
 
 }

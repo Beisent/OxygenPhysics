@@ -1,8 +1,8 @@
 ﻿cmake_minimum_required(VERSION 3.10)
 project(OxygenRenderExample)
 
-set(CMAKE_CXX_STANDARD 17)
-
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin) 
 
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/OxygenPhysics/include)
@@ -22,6 +22,7 @@ include_directories(
     ${INCLUDE_DIR}/Components
     ${INCLUDE_DIR}/Common
     ${INCLUDE_DIR}/Factories
+    ${INCLUDE_DIR}/Systems
 
 
 )
@@ -31,6 +32,7 @@ add_subdirectory(${VENDOR_DIR}/entt)
 file(GLOB SOURCES
     ${CMAKE_SOURCE_DIR}/OxygenPhysics/src/*.cpp
     ${CMAKE_SOURCE_DIR}/OxygenPhysics/utils/*.cpp
+    ${CMAKE_SOURCE_DIR}/OxygenPhysics/src/Systems/*.cpp
     ${CMAKE_SOURCE_DIR}/tests/*.cpp
 )
 
