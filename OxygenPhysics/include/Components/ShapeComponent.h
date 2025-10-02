@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include <variant>
 #include <vector>
 #include "OxyMathLite.h"
 using namespace OxygenMathLite;

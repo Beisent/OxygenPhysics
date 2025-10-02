@@ -22,19 +22,13 @@ namespace OxyPhysics
 
             registry.emplace<TransformComponent>(e, def.position, def.angle);
             registry.emplace<VelocityComponent>(e, def.velocity);
-            /*
-            real mass{1.0};
-            real invMass{1.0};
-            real inertia{1.0};
-            real invInertia{1.0};
-            bool isStatic{false};*/
+            
             MassComponent massComp;
             massComp.mass = def.mass;
             massComp.invMass = 1.0f / massComp.mass;
             massComp.inertia = computeInertia(def.mass, shape);
             massComp.invInertia = 1.0f / massComp.inertia;
             massComp.isStatic = def.isStatic;
-
             registry.emplace<MassComponent>(e, massComp);
 
             registry.emplace<ShapeComponent>(e, shape);

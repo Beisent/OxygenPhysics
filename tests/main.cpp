@@ -1,8 +1,6 @@
 ﻿#include "OxygenRender.h"
-#include <entt/entt.hpp>
-#include "Components.h"
-#include "Factories.h"
-#include "World.h"
+#include "PhysicsThread.h"
+#include "Factories/Factories.h"
 #include "OxyMathLite.h"
 #include "draw.h"
 
@@ -16,22 +14,38 @@ int main()
     Renderer renderer(window);
     Graphics2D graphics2D(window, renderer);
 
-    // 创建物理世界
-    PhysicsWorld world;
-
-    // 创建几个物体
-    BodyDef body;
-    body.position = Vec2(0, 0);
-    body.velocity = Vec2(0, 10);
-    body.mass = 1.0;
-    body.isStatic = false;
+    // 创建物理模拟系统
+    PhysicsThread simulation;
     
-    auto circle = ShapeFactory::CreateCircle(10.0);
-    world.CreateRigid(body, circle);
+    // 启动物理模拟线程
+    simulation.Start();
 
+    // 获取物理世界引用并创建物体
+    auto& world = simulation.GetWorld();
+    
+    // // 创建几个物体
+    // BodyDef body;
+    // body.position = Vec2(0, 0);
+    // body.velocity = Vec2(0, 10);
+    // body.mass = 1.0;
+    // body.isStatic = false;
+    
+    // auto circle = ShapeFactory::CreateCircle(100.0);
+    // world.CreateRigid(body, circle);
+
+    // 创建更多物体以测试多线程
+    for (int i = 0; i < 10; i++) {
+        BodyDef otherBody;
+        otherBody.position = OxygenMathLite::Vec2(-50 + i * 10, -50);
+        otherBody.velocity = OxygenMathLite::Vec2(0, 50+i*10);
+        otherBody.mass = 1.0;
+        otherBody.isStatic = false;
+        
+        world.CreateRigid(otherBody, ShapeFactory::CreateCircle(50.0));
+    }
 
     // 创建调试渲染器
-    PhysicsDebugDraw debugDraw(world, graphics2D);
+    PhysicsDebugDraw debugDraw(simulation, graphics2D);
 
     auto &timer = Timer::getInstance();
     timer.setTargetFPS(120);
@@ -39,10 +53,6 @@ int main()
     while (!window.shouldClose())
     {
         timer.update(window);
-        double dt = timer.deltaTime();
-
-        // 更新物理
-        world.Step(static_cast<real>(dt));
 
         // 渲染
         graphics2D.clear();
@@ -55,6 +65,9 @@ int main()
 
         window.update();
     }
+
+    // 停止物理模拟线程
+    simulation.Stop();
 
     return 0;
 }
