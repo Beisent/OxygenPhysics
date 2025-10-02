@@ -6,7 +6,7 @@ namespace OxyPhysics
     {
     public:
         // 创建圆形
-        static ShapeComponent CreateCircle(real radius, const Vec2& localPos = {0,0})
+        static ShapeComponent CreateCircle(real radius, const OxygenMathLite::Vec2& localPos = {0,0})
         {
             Circle c{radius};
             ShapeComponent shape(c);
@@ -15,7 +15,7 @@ namespace OxyPhysics
         }
 
         // 创建方形/Box
-        static ShapeComponent CreateBox(real size, const Vec2& localPos = {0,0})
+        static ShapeComponent CreateBox(real size, const OxygenMathLite::Vec2& localPos = {0,0})
         {
             Box b{size};
             ShapeComponent shape(b);
@@ -24,7 +24,7 @@ namespace OxyPhysics
         }
 
         // 创建多边形
-        static ShapeComponent CreatePolygon(const std::vector<Vec2>& vertices, const Vec2& localPos = {0,0})
+        static ShapeComponent CreatePolygon(const std::vector<OxygenMathLite::Vec2>& vertices, const OxygenMathLite::Vec2& localPos = {0,0})
         {
             Polygon p;
             p.vertices = vertices;

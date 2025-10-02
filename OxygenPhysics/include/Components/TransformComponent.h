@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "OxyMathLite.h"
+#include "Common/OxygenMathLite.h"
 using namespace OxygenMathLite;
 namespace OxyPhysics
 {

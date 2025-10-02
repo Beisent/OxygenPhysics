@@ -1,7 +1,8 @@
 ﻿#pragma once
+#include "Common/OxygenMathLite.h"
 #include <vector>
-#include "OxyMathLite.h"
-using namespace OxygenMathLite;
+
+
 namespace OxyPhysics
 {
     struct Circle
@@ -16,8 +17,8 @@ namespace OxyPhysics
 
     struct Polygon
     {
-        std::vector<Vec2> vertices = {{0.0f,5.0f},{-5.0f,0.0f},{5.0f,0.0f}};
-        Polygon() {} 
+        std::vector<OxygenMathLite::Vec2> vertices = {{0.0f,5.0f},{-5.0f,0.0f},{5.0f,0.0f}};
+        Polygon() {}
     };
 
     enum class ShapeType : uint8_t
@@ -30,7 +31,7 @@ namespace OxyPhysics
     struct ShapeComponent
     {
         ShapeType type;
-        Vec2 localPosition{0, 0};
+        OxygenMathLite::Vec2 localPosition{0, 0};
         real localRotation{0.0};
         Circle circle;
         Box box;

@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include "Common/OxygenMathLite.h"
+using namespace OxygenMathLite;
 namespace OxyPhysics
 {
     struct MassComponent

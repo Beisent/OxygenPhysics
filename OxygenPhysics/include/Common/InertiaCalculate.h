@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "OxyMathLite.h"
+#include "Common/OxygenMathLite.h"
 namespace OxygenMathLite
 {
     class InertiaCalculate
