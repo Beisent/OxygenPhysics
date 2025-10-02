@@ -35,13 +35,13 @@ int main()
 
     // 创建更多物体以测试多线程
     for (int i = 0; i < 10; i++) {
-        BodyDef otherBody;
-        otherBody.position = OxygenMathLite::Vec2(-50 + i * 10, -50);
-        otherBody.velocity = OxygenMathLite::Vec2(0, 50+i*10);
-        otherBody.mass = 1.0;
-        otherBody.isStatic = false;
+        BodyDef Body;
+        Body.position = OxygenMathLite::Vec2(-50 + i * 10, -50);
+        Body.velocity = OxygenMathLite::Vec2(0, 50+i*10);
+        Body.mass = 1.0;
+        Body.isStatic = false;
         
-        world.CreateRigid(otherBody, ShapeFactory::CreateCircle(50.0));
+        world.CreateRigid(Body, ShapeFactory::CreateCircle(50.0));
     }
 
     // 创建调试渲染器
