@@ -46,15 +46,18 @@ namespace OxyPhysics
     // 物理步进
     void PhysicsWorld::Step(real dt)
     {
-        auto view = registry.view<TransformComponent, VelocityComponent, MassComponent>();
+        auto view = registry.view<TransformComponent, VelocityComponent, MassComponent, ShapeComponent, AABBComponent>();
 
-        view.each([dt](auto entity, auto &transform, auto &velocity, auto &mass)
+        view.each([dt](auto entity, auto &tf, auto &vel, auto &mass, auto &shape, auto &aabb)
                   {
-                if (mass.isStatic)
-                    return;
+        if (mass.isStatic)
+            return;
 
-                transform.position += velocity.linearVelocity * dt;
-                transform.rotation += velocity.angularVelocity * dt; });
+        // 移动
+        tf.position += vel.linearVelocity * dt;
+        tf.rotation += vel.angularVelocity * dt;
+
+        // 更新 AABB
+        aabb = ComputeAABB(tf, shape); });
     }
-
 }

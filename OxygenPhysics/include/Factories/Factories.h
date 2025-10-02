@@ -1,3 +1,3 @@
 ﻿#pragma once 
 #include "ShapeFactory.h"
-#include "BodyFactory.h"
+#include "RigidFactory.h"

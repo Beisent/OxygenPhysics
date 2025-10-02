@@ -4,3 +4,4 @@
 #include "TransformComponent.h"
 #include "MassComponent.h"
 #include "MaterialComponent.h"
+#include "ManifoldComponent.h"

@@ -4,6 +4,7 @@
 #include <sstream>
 #include <algorithm>
 #include <random>
+#include <numeric>
 
 #ifdef DOUBLE_PRECISION
 using real = double;
@@ -26,9 +27,11 @@ namespace OxygenMathLite
 #ifdef DOUBLE_PRECISION
         constexpr real PI = 3.141592653589793238462643383279502884;
         constexpr real Epsilon = 1e-12;
+        constexpr real Infinity = std::numeric_limits<real>::infinity();
 #else
         constexpr real PI = 3.14159265358979323846f;
         constexpr real Epsilon = 1e-6f;
+        constexpr real Infinity = std::numeric_limits<real>::infinity();
 #endif
         constexpr real TWO_PI = 2.0f * PI;
         constexpr real HALF_PI = 0.5f * PI;

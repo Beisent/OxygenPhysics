@@ -10,6 +10,7 @@ namespace OxyPhysics
         Vec2 position;
         real rotation;
         ShapeType shapeType;
+        AABBComponent aabb;
 
         // 形状相关数据
         real circleRadius = 0.0f;
