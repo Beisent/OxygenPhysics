@@ -3,6 +3,7 @@
 #include "Components/Components.h"
 #include "Factories/ShapeFactory.h"
 #include "Common/ComputeInertia.h"
+#include "Common/ComputeAABB.h"
 namespace OxyPhysics
 {
     struct BodyDef
@@ -32,6 +33,7 @@ namespace OxyPhysics
             registry.emplace<MassComponent>(e, massComp);
 
             registry.emplace<ShapeComponent>(e, shape);
+            registry.emplace<AABBComponent>(e, computeAABB(registry.get<TransformComponent>(e), shape));
 
             return e;
         }

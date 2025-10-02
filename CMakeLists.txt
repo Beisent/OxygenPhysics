@@ -33,6 +33,7 @@ file(GLOB SOURCES
     ${CMAKE_SOURCE_DIR}/OxygenPhysics/src/*.cpp
     ${CMAKE_SOURCE_DIR}/OxygenPhysics/utils/*.cpp
     ${CMAKE_SOURCE_DIR}/OxygenPhysics/src/Systems/*.cpp
+    ${CMAKE_SOURCE_DIR}/OxygenPhysics/src/Common/*.cpp
     ${CMAKE_SOURCE_DIR}/tests/*.cpp
 )
 

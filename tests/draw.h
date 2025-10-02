@@ -16,7 +16,8 @@ namespace OxyPhysics
     {
     public:
         PhysicsDebugDraw(PhysicsThread
-         &simulation, Graphics2D &graphics)
+                             &simulation,
+                         Graphics2D &graphics)
             : m_simulation(simulation), m_graphics(graphics) {}
 
         void Draw()
@@ -43,9 +44,18 @@ namespace OxyPhysics
                 float cosTheta = std::cos(data.rotation + data.localRotation);
                 float sinTheta = std::sin(data.rotation + data.localRotation);
                 OxygenMathLite::Vec2 pos = data.position + OxygenMathLite::Vec2{
-                                                         data.localPosition.x * cosTheta - data.localPosition.y * sinTheta,
-                                                         data.localPosition.x * sinTheta + data.localPosition.y * cosTheta};
+                                                               data.localPosition.x * cosTheta - data.localPosition.y * sinTheta,
+                                                               data.localPosition.x * sinTheta + data.localPosition.y * cosTheta};
 
+                OxygenMathLite::Vec2 min = data.aabb.min;
+                OxygenMathLite::Vec2 max = data.aabb.max;
+                std::vector<MathLite::Vec2> aabbVerts = {
+                    {min.x, min.y},
+                    {max.x, min.y},
+                    {max.x, max.y},
+                    {min.x, max.y}};
+                OxyRender::OxyColor aabbColor{1.0f, 0.0f, 0.0f, 1.0f}; // 红色表示AABB
+                m_graphics.drawPolygonOutline(aabbVerts, aabbColor);
                 switch (data.shapeType)
                 {
                 case ShapeType::Circle:
@@ -86,7 +96,7 @@ namespace OxyPhysics
 
     private:
         PhysicsThread
-     &m_simulation;
+            &m_simulation;
         Graphics2D &m_graphics;
 
         float hashToFloat(uint32_t id)

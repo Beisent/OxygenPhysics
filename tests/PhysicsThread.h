@@ -140,8 +140,8 @@ namespace OxyPhysics
             m_renderDataCache.clear();
 
             // 收集所有需要渲染的物体数据
-            auto view = m_world->registry.view<TransformComponent, ShapeComponent>();
-            view.each([this](auto entity, auto &transform, auto &shape)
+            auto view = m_world->registry.view<TransformComponent, ShapeComponent, AABBComponent>();
+            view.each([this](auto entity, auto &transform, auto &shape, auto &aabb)
                       {
             RenderData data;
             data.position = transform.position;
@@ -149,6 +149,7 @@ namespace OxyPhysics
             data.shapeType = shape.type;
             data.localPosition = shape.localPosition;
             data.localRotation = shape.localRotation;
+            data.aabb = aabb;
             data.entityId = static_cast<uint32_t>(entt::to_integral(entity));
             
             // 根据形状类型存储相应的数据

@@ -1,5 +1,6 @@
 ﻿#include "World.h"
 #include "Components/Components.h"
+#include "Common/ComputeAABB.h"
 
 namespace OxyPhysics
 {
@@ -58,6 +59,6 @@ namespace OxyPhysics
         tf.rotation += vel.angularVelocity * dt;
 
         // 更新 AABB
-        aabb = ComputeAABB(tf, shape); });
+        aabb = computeAABB(tf, shape); });
     }
 }
