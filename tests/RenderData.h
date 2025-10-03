@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Common/OxygenMathLite.h"
 #include "Components/ShapeComponent.h"
+#include "Components/AABBComponent.h"
+#include <vector>
 
 namespace OxyPhysics
 {
@@ -22,7 +24,10 @@ namespace OxyPhysics
         real localRotation;
 
         // 颜色（可由外部决定如何生成）
-        uint32_t entityId;
+        entt::entity entityId;
+
+        // 碰撞对
+        std::vector<CollisionPair> collisionPairs;
     };
 
 } // namespace OxyPhysics

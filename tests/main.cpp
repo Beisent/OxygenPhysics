@@ -16,31 +16,29 @@ int main()
 
     // 创建物理模拟系统
     PhysicsThread simulation;
-    
+
     // 启动物理模拟线程
     simulation.Start();
 
     // 获取物理世界引用并创建物体
-    auto& world = simulation.GetWorld();
-    
-    // // 创建几个物体
-    // BodyDef body;
-    // body.position = Vec2(0, 0);
-    // body.velocity = Vec2(0, 10);
-    // body.mass = 1.0;
-    // body.isStatic = false;
-    
-    // auto circle = ShapeFactory::CreateCircle(100.0);
-    // world.CreateRigid(body, circle);
+    auto &world = simulation.GetWorld();
 
-    // 创建更多物体以测试多线程
-    for (int i = 0; i < 10; i++) {
+    BodyDef Body;
+    Body.position = OxygenMathLite::Vec2(-350 , -50);
+    Body.velocity = OxygenMathLite::Vec2(50, 0);
+    Body.mass = 1.0;
+    Body.isStatic = false;
+
+    world.CreateRigid(Body, ShapeFactory::CreateCircle(50.0));
+    // 创建物体以测试多线程
+    for (int i = 0; i < 5; i++)
+    {
         BodyDef Body;
-        Body.position = OxygenMathLite::Vec2(-50 + i * 10, -50);
-        Body.velocity = OxygenMathLite::Vec2(0, 50+i*10);
+        Body.position = OxygenMathLite::Vec2(-300 + i * 105, -50);
+        Body.velocity = OxygenMathLite::Vec2(0, 0);
         Body.mass = 1.0;
         Body.isStatic = false;
-        
+
         world.CreateRigid(Body, ShapeFactory::CreateCircle(50.0));
     }
 

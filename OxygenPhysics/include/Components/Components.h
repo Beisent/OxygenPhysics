@@ -5,3 +5,4 @@
 #include "MassComponent.h"
 #include "MaterialComponent.h"
 #include "ManifoldComponent.h"
+#include "AABBComponent.h"

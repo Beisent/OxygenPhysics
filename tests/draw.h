@@ -18,7 +18,7 @@ namespace OxyPhysics
         PhysicsDebugDraw(PhysicsThread
                              &simulation,
                          Graphics2D &graphics)
-            : m_simulation(simulation), m_graphics(graphics) {}
+            : m_simulation(simulation), m_graphics(graphics), AABBDraw(true) {}
 
         void Draw()
         {
@@ -34,7 +34,7 @@ namespace OxyPhysics
             for (const auto &data : renderData)
             {
                 // 用 entity ID 通过hash生成固定颜色
-                uint32_t id = data.entityId;
+                uint32_t id = static_cast<uint32_t>(entt::to_integral(data.entityId));
                 float r = hashToFloat(id);
                 float g = hashToFloat(id * 7 + 3);
                 float b = hashToFloat(id * 13 + 5);
@@ -47,15 +47,30 @@ namespace OxyPhysics
                                                                data.localPosition.x * cosTheta - data.localPosition.y * sinTheta,
                                                                data.localPosition.x * sinTheta + data.localPosition.y * cosTheta};
 
-                OxygenMathLite::Vec2 min = data.aabb.min;
-                OxygenMathLite::Vec2 max = data.aabb.max;
-                std::vector<MathLite::Vec2> aabbVerts = {
-                    {min.x, min.y},
-                    {max.x, min.y},
-                    {max.x, max.y},
-                    {min.x, max.y}};
-                OxyRender::OxyColor aabbColor{1.0f, 0.0f, 0.0f, 1.0f}; // 红色表示AABB
-                m_graphics.drawPolygonOutline(aabbVerts, aabbColor);
+                if (AABBDraw)
+                {
+                    OxygenMathLite::Vec2 min = data.aabb.min;
+                    OxygenMathLite::Vec2 max = data.aabb.max;
+                    std::vector<MathLite::Vec2> aabbVerts = {
+                        {min.x, min.y},
+                        {max.x, min.y},
+                        {max.x, max.y},
+                        {min.x, max.y}};
+
+                    // 默认红色
+                    OxyRender::OxyColor aabbColor{1.0f, 0.0f, 0.0f, 1.0f};
+
+                    // 检查是否在碰撞对中改成蓝色
+                    for (auto &pair : data.collisionPairs)
+                    {
+                        if (pair.a == data.entityId || pair.b == data.entityId)
+                        {
+                            aabbColor = {0.0f, 0.0f, 1.0f, 1.0f};
+                            break;
+                        }
+                    }
+                    m_graphics.drawPolygonOutline(aabbVerts, aabbColor);
+                }
                 switch (data.shapeType)
                 {
                 case ShapeType::Circle:
@@ -95,8 +110,8 @@ namespace OxyPhysics
         }
 
     private:
-        PhysicsThread
-            &m_simulation;
+        PhysicsThread &m_simulation;
+        bool AABBDraw;
         Graphics2D &m_graphics;
 
         float hashToFloat(uint32_t id)

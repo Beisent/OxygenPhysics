@@ -3,7 +3,6 @@
 #include "Components/Components.h"
 #include "Factories/ShapeFactory.h"
 #include "Common/ComputeInertia.h"
-#include "Common/ComputeAABB.h"
 namespace OxyPhysics
 {
     struct BodyDef

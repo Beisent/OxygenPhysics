@@ -1,9 +1,13 @@
 ﻿#include "World.h"
 #include "Components/Components.h"
-#include "Common/ComputeAABB.h"
+#include <iostream>
 
 namespace OxyPhysics
 {
+
+    PhysicsWorld::PhysicsWorld() : m_broadPhase(std::make_unique<BroadPhaseNaive>())
+    {
+    }
     entt::entity PhysicsWorld::CreateCircleRigid(const Vec2 &position, real radius, real mass, bool isStatic)
     {
         BodyDef def;
@@ -44,21 +48,26 @@ namespace OxyPhysics
         RigidFactory::DestroyRigid(registry, e);
     }
 
+    void PhysicsWorld::SetBroadPhase(std::unique_ptr<BroadPhase> bp)
+    {
+        m_broadPhase = std::move(bp);
+    }
     // 物理步进
     void PhysicsWorld::Step(real dt)
     {
         auto view = registry.view<TransformComponent, VelocityComponent, MassComponent, ShapeComponent, AABBComponent>();
 
-        view.each([dt](auto entity, auto &tf, auto &vel, auto &mass, auto &shape, auto &aabb)
+        view.each([this, dt](auto entity, auto &tf, auto &vel, auto &mass, auto &shape, auto &aabb)
                   {
-        if (mass.isStatic)
-            return;
+                      if (mass.isStatic)
+                          return;
 
-        // 移动
-        tf.position += vel.linearVelocity * dt;
-        tf.rotation += vel.angularVelocity * dt;
+                      // 移动
+                      tf.position += vel.linearVelocity * dt;
+                      tf.rotation += vel.angularVelocity * dt;
 
-        // 更新 AABB
-        aabb = computeAABB(tf, shape); });
+                      // 更新 AABB
+                      aabb = computeAABB(tf, shape); });
+        m_broadPhase->findPairs(registry, m_collisionPairs);
     }
 }

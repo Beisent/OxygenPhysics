@@ -2,15 +2,22 @@
 #include <entt/entt.hpp>
 #include "Common/OxygenMathLite.h"
 #include "Factories/Factories.h"
+#include <memory>
+#include "Systems/Collision.h"
 using namespace OxygenMathLite;
 namespace OxyPhysics
 {
     class PhysicsWorld
     {
+    private:
+        std::unique_ptr<BroadPhase> m_broadPhase;
+        
+
     public:
         entt::registry registry;
+        std::vector<CollisionPair> m_collisionPairs;
 
-        PhysicsWorld() = default;
+        PhysicsWorld();
 
         // 创建圆形刚体
         entt::entity CreateCircleRigid(const Vec2 &position, real radius, real mass = 1.0f, bool isStatic = false);
@@ -26,6 +33,7 @@ namespace OxyPhysics
 
         // 删除刚体
         void DestroyRigid(entt::entity e);
+        void SetBroadPhase(std::unique_ptr<BroadPhase> bp);
 
         // 物理步进
         void Step(real dt);

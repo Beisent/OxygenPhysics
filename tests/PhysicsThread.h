@@ -150,7 +150,8 @@ namespace OxyPhysics
             data.localPosition = shape.localPosition;
             data.localRotation = shape.localRotation;
             data.aabb = aabb;
-            data.entityId = static_cast<uint32_t>(entt::to_integral(entity));
+            data.entityId = entity;
+            data.collisionPairs = m_world->m_collisionPairs;
             
             // 根据形状类型存储相应的数据
             switch (shape.type) {

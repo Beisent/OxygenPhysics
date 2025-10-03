@@ -5,12 +5,7 @@
 using namespace OxygenMathLite;
 namespace OxyPhysics
 {
-    struct AABBComponent
-    {
-        Vec2 min;
-        Vec2 max;
-    };
-
+   
     struct CollisionPair
     {
         entt::entity a;
@@ -20,7 +15,7 @@ namespace OxyPhysics
     struct ContactPoint
     {
         Vec2 position;    // 接触点
-        Vec2 normal;      // 法线（指向B）
+        Vec2 normal;      // 法线
         real penetration; // 渗透深度
     };
 
