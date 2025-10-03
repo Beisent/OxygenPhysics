@@ -5,11 +5,7 @@
 
 namespace OxyPhysics
 {
-    inline bool overlapAABB(const AABBComponent &a, const AABBComponent &b)
-    {
-        return (a.min.x <= b.max.x && a.max.x >= b.min.x) &&
-               (a.min.y <= b.max.y && a.max.y >= b.min.y);
-    }
+   
 
        // 粗检测，用于快速排除无用的检测
     class BroadPhase
@@ -21,12 +17,12 @@ namespace OxyPhysics
         virtual void compute(entt::registry &reg) {}
 
         // 必选：寻找潜在碰撞对
-        virtual void findPairs(entt::registry &reg, std::vector<CollisionPair> &pairs) = 0;
+        virtual void findPairs(entt::registry &reg, std::vector<Components::CollisionPair> &pairs) = 0;
     };
 
     class BroadPhaseNaive : public BroadPhase
     {
     public:
-        void findPairs(entt::registry &reg, std::vector<CollisionPair> &pairs) override;
+        void findPairs(entt::registry &reg, std::vector<Components::CollisionPair> &pairs) override;
     };
 }

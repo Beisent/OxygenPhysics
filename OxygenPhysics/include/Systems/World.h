@@ -5,6 +5,7 @@
 #include <memory>
 #include "Systems/Collision.h"
 using namespace OxygenMathLite;
+
 namespace OxyPhysics
 {
     class PhysicsWorld
@@ -15,7 +16,7 @@ namespace OxyPhysics
 
     public:
         entt::registry registry;
-        std::vector<CollisionPair> m_collisionPairs;
+        std::vector<Components::CollisionPair> m_collisionPairs;
 
         PhysicsWorld();
 
@@ -29,7 +30,7 @@ namespace OxyPhysics
         entt::entity CreatePolygonRigid(const Vec2 &position, const std::vector<Vec2> &vertices, real mass = 1.0f, bool isStatic = false);
 
         // 创建刚体
-        entt::entity CreateRigid(const BodyDef &def, const ShapeComponent &shape);
+        entt::entity CreateRigid(const BodyDef &def, const Components::ShapeComponent &shape);
 
         // 删除刚体
         void DestroyRigid(entt::entity e);

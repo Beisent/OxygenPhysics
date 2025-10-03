@@ -140,7 +140,10 @@ namespace OxyPhysics
             m_renderDataCache.clear();
 
             // 收集所有需要渲染的物体数据
-            auto view = m_world->registry.view<TransformComponent, ShapeComponent, AABBComponent>();
+            auto view = m_world->registry.view<
+                Components::TransformComponent,
+                Components::ShapeComponent,
+                Components::AABBComponent>();
             view.each([this](auto entity, auto &transform, auto &shape, auto &aabb)
                       {
             RenderData data;

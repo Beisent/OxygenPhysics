@@ -6,14 +6,17 @@
 using namespace OxygenMathLite;
 namespace OxyPhysics
 {
-    struct AABBComponent
+    namespace Components
     {
-        Vec2 min;
-        Vec2 max;
-    };
-    inline AABBComponent computeAABB(const TransformComponent &tf, const ShapeComponent &shape)
+        struct AABBComponent
+        {
+            Vec2 min;
+            Vec2 max;
+        };
+    }
+    inline Components::AABBComponent computeAABB(const Components::TransformComponent &tf, const Components::ShapeComponent &shape)
     {
-        AABBComponent aabb;
+        Components::AABBComponent aabb;
         switch (shape.type)
         {
         case ShapeType::Circle:
@@ -58,7 +61,7 @@ namespace OxyPhysics
         }
         return aabb;
     }
-    inline bool overlapAABB(const AABBComponent &a, const AABBComponent &b)
+    inline bool overlapAABB(const Components::AABBComponent &a, const Components::AABBComponent &b)
     {
         return (a.min.x <= b.max.x && a.max.x >= b.min.x) &&
                (a.min.y <= b.max.y && a.max.y >= b.min.y);

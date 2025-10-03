@@ -3,6 +3,7 @@
 #include "Components/Components.h"
 #include "Factories/ShapeFactory.h"
 #include "Common/ComputeInertia.h"
+
 namespace OxyPhysics
 {
     struct BodyDef
@@ -16,23 +17,23 @@ namespace OxyPhysics
     class RigidFactory
     {
     public:
-        static entt::entity CreateRigid(entt::registry &registry, const BodyDef &def, const ShapeComponent &shape)
+        static entt::entity CreateRigid(entt::registry &registry, const BodyDef &def, const Components::ShapeComponent &shape)
         {
             auto e = registry.create();
 
-            registry.emplace<TransformComponent>(e, def.position, def.angle);
-            registry.emplace<VelocityComponent>(e, def.velocity);
+            registry.emplace<Components::TransformComponent>(e, def.position, def.angle);
+            registry.emplace<Components::VelocityComponent>(e, def.velocity);
             
-            MassComponent massComp;
+            Components::MassComponent massComp;
             massComp.mass = def.mass;
             massComp.invMass = 1.0f / massComp.mass;
             massComp.inertia = computeInertia(def.mass, shape);
             massComp.invInertia = 1.0f / massComp.inertia;
             massComp.isStatic = def.isStatic;
-            registry.emplace<MassComponent>(e, massComp);
+            registry.emplace<Components::MassComponent>(e, massComp);
 
-            registry.emplace<ShapeComponent>(e, shape);
-            registry.emplace<AABBComponent>(e, computeAABB(registry.get<TransformComponent>(e), shape));
+            registry.emplace<Components::ShapeComponent>(e, shape);
+            registry.emplace<Components::AABBComponent>(e, computeAABB(registry.get<Components::TransformComponent>(e), shape));
 
             return e;
         }
@@ -46,7 +47,7 @@ namespace OxyPhysics
         }
 
     private:
-        static real computeInertia(real mass, const ShapeComponent &shape)
+        static real computeInertia(real mass, const Components::ShapeComponent &shape)
         {
             switch (shape.type)
             {

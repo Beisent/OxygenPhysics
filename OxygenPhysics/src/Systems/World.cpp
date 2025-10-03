@@ -39,7 +39,7 @@ namespace OxyPhysics
         return RigidFactory::CreateRigid(registry, def, shape);
     }
 
-    entt::entity PhysicsWorld::CreateRigid(const BodyDef &def, const ShapeComponent &shape)
+    entt::entity PhysicsWorld::CreateRigid(const BodyDef &def, const Components::ShapeComponent &shape)
     {
         return RigidFactory::CreateRigid(registry, def, shape);
     }
@@ -55,7 +55,8 @@ namespace OxyPhysics
     // 物理步进
     void PhysicsWorld::Step(real dt)
     {
-        auto view = registry.view<TransformComponent, VelocityComponent, MassComponent, ShapeComponent, AABBComponent>();
+        auto view = registry.view<Components::TransformComponent, Components::VelocityComponent,
+                                  Components::MassComponent, Components::ShapeComponent, Components::AABBComponent>();
 
         view.each([this, dt](auto entity, auto &tf, auto &vel, auto &mass, auto &shape, auto &aabb)
                   {

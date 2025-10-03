@@ -12,7 +12,7 @@ namespace OxyPhysics
         Vec2 position;
         real rotation;
         ShapeType shapeType;
-        AABBComponent aabb;
+        Components::AABBComponent aabb;
 
         // 形状相关数据
         real circleRadius = 0.0f;
@@ -27,7 +27,7 @@ namespace OxyPhysics
         entt::entity entityId;
 
         // 碰撞对
-        std::vector<CollisionPair> collisionPairs;
+        std::vector<Components::CollisionPair> collisionPairs;
     };
 
 } // namespace OxyPhysics

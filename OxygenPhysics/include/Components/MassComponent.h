@@ -3,6 +3,8 @@
 using namespace OxygenMathLite;
 namespace OxyPhysics
 {
+    namespace Components
+    {
     struct MassComponent
     {
         real mass{1.0};
@@ -12,4 +14,5 @@ namespace OxyPhysics
         bool isStatic{false};
         MassComponent(){}
     };
+}
 }
