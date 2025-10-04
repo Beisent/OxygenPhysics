@@ -1,18 +1,18 @@
-﻿#include "OxygenRender.h"
-#include "PhysicsThread.h"
+﻿#include "PhysicsThread.h"
 #include "Factories/Factories.h"
 #include "Common/OxygenMathLite.h"
 #include "draw.h"
+#include <SFML/Graphics.hpp>
+#include <iostream>
 
-using namespace OxyRender;
 using namespace OxyPhysics;
 using namespace OxygenMathLite;
 
 int main()
 {
-    Window window(800, 600, "Simple2D");
-    Renderer renderer(window);
-    Graphics2D graphics2D(window, renderer);
+    // 创建SFML窗口
+    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 600)), "OxygenPhysics with SFML");
+    window.setFramerateLimit(120);
 
     // 创建物理模拟系统
     PhysicsThread simulation;
@@ -43,26 +43,28 @@ int main()
         world.CreateRigid(Body, ShapeFactory::CreateCircle(50.0));
     }
 
-    // 创建调试渲染器
-    PhysicsDebugDraw debugDraw(simulation, graphics2D);
+    // 创建调试渲染器 - 使用SFML窗口
+    PhysicsDebugDraw debugDraw(simulation, window);
 
-    auto &timer = Timer::getInstance();
-    timer.setTargetFPS(120);
-
-    while (!window.shouldClose())
+    // 主循环
+    sf::Clock clock;
+    while (window.isOpen())
     {
-        timer.update(window);
+        // 处理事件
+        while (const std::optional<sf::Event> event = window.pollEvent())
+        {
+            if (event->is<sf::Event::Closed>())
+                window.close();
+        }
 
-        // 渲染
-        graphics2D.clear();
-        graphics2D.begin();
+        // 清除窗口
+        window.clear(sf::Color::Black);
 
         // 绘制物理世界中的物体
         debugDraw.Draw();
 
-        graphics2D.flush();
-
-        window.update();
+        // 显示窗口内容
+        window.display();
     }
 
     // 停止物理模拟线程

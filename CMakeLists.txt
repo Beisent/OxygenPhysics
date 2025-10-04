@@ -1,5 +1,5 @@
 ﻿cmake_minimum_required(VERSION 3.10)
-project(OxygenRenderExample)
+project(OxygenPhysicsExample)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -11,10 +11,7 @@ set(TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
 
 # 包含头文件目录
 include_directories(
-    ${VENDOR_DIR}/OxygenRender
-    ${VENDOR_DIR}/glm
-    ${VENDOR_DIR}/glfw
-    ${VENDOR_DIR}/GLAD
+    ${VENDOR_DIR}/SFML/include
     ${VENDOR_DIR}
 
     ${TEST_DIR}
@@ -23,8 +20,6 @@ include_directories(
     ${INCLUDE_DIR}/Common
     ${INCLUDE_DIR}/Factories
     ${INCLUDE_DIR}/Systems
-
-
 )
 add_subdirectory(${VENDOR_DIR}/entt)
 
@@ -37,10 +32,30 @@ file(GLOB SOURCES
     ${CMAKE_SOURCE_DIR}/tests/*.cpp
 )
 
-add_executable(OxygenRenderExample ${SOURCES})
+add_executable(OxygenPhysicsExample ${SOURCES})
 
-target_link_libraries(OxygenRenderExample
-    ${CMAKE_SOURCE_DIR}/bin/libOxygenRender.dll.a
-    EnTT::EnTT
-    opengl32
-)
+# 链接SFML库和其他依赖项
+if(WIN32)
+    # Windows平台
+    target_link_libraries(OxygenPhysicsExample
+        ${CMAKE_SOURCE_DIR}/lib/libsfml-graphics-s.a
+        ${CMAKE_SOURCE_DIR}/lib/libsfml-window-s.a
+        ${CMAKE_SOURCE_DIR}/lib/libsfml-system-s.a
+        opengl32
+        ${CMAKE_SOURCE_DIR}/lib/libfreetype.a
+        winmm
+        gdi32
+        pthread
+        EnTT::EnTT
+    )
+    # 定义静态链接宏
+    target_compile_definitions(OxygenPhysicsExample PRIVATE SFML_STATIC)
+else()
+    # Linux/macOS平台
+    target_link_libraries(OxygenPhysicsExample
+        sfml-graphics
+        sfml-window
+        sfml-system
+        EnTT::EnTT
+    )
+endif()

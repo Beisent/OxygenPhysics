@@ -1,24 +1,22 @@
 ﻿#pragma once
 #include "PhysicsThread.h"
-#include "Graphics2D.h"
 #include "RenderData.h"
 #include "Common/OxygenMathLite.h"
 #include <cmath>
 #include <random>
+#include <SFML/Graphics.hpp>
+#include <cstdint>
 
 using namespace OxyPhysics;
-using namespace OxyRender;
 
 namespace OxyPhysics
 {
-    // 简单的物理调试渲染器
+    // 简单的物理调试渲染器 - 使用SFML
     class PhysicsDebugDraw
     {
     public:
-        PhysicsDebugDraw(PhysicsThread
-                             &simulation,
-                         Graphics2D &graphics)
-            : m_simulation(simulation), m_graphics(graphics), AABBDraw(true) {}
+        PhysicsDebugDraw(PhysicsThread &simulation, sf::RenderWindow &window)
+            : m_simulation(simulation), m_window(window), m_AABBDraw(true) {}
 
         void Draw()
         {
@@ -39,80 +37,113 @@ namespace OxyPhysics
                 float g = hashToFloat(id * 7 + 3);
                 float b = hashToFloat(id * 13 + 5);
 
-                OxyRender::OxyColor color{r, g, b, 1.0f};
+                sf::Color color(static_cast<uint8_t>(r * 255), 
+                                static_cast<uint8_t>(g * 255), 
+                                static_cast<uint8_t>(b * 255));
 
                 float cosTheta = std::cos(data.rotation + data.localRotation);
                 float sinTheta = std::sin(data.rotation + data.localRotation);
                 OxygenMathLite::Vec2 pos = data.position + OxygenMathLite::Vec2{
-                                                               data.localPosition.x * cosTheta - data.localPosition.y * sinTheta,
-                                                               data.localPosition.x * sinTheta + data.localPosition.y * cosTheta};
+                                                                data.localPosition.x * cosTheta - data.localPosition.y * sinTheta,
+                                                                data.localPosition.x * sinTheta + data.localPosition.y * cosTheta};
 
-                if (AABBDraw)
+                // 转换为SFML坐标系（SFML原点在左上角，我们的物理世界原点在中心）
+                sf::Vector2f sfmlPos(m_window.getSize().x / 2 + pos.x, m_window.getSize().y / 2 - pos.y);
+
+                if (m_AABBDraw)
                 {
                     OxygenMathLite::Vec2 min = data.aabb.min;
                     OxygenMathLite::Vec2 max = data.aabb.max;
-                    std::vector<MathLite::Vec2> aabbVerts = {
-                        {min.x, min.y},
-                        {max.x, min.y},
-                        {max.x, max.y},
-                        {min.x, max.y}};
-
+                    
+                    // 转换AABB到SFML坐标系
+                    sf::Vector2f sfmlMin(m_window.getSize().x / 2 + min.x, m_window.getSize().y / 2 - min.y);
+                    sf::Vector2f sfmlMax(m_window.getSize().x / 2 + max.x, m_window.getSize().y / 2 - max.y);
+                    
+                    // 创建AABB矩形
+                    sf::RectangleShape aabbRect(sf::Vector2f(sfmlMax.x - sfmlMin.x, sfmlMin.y - sfmlMax.y));
+                    aabbRect.setPosition(sf::Vector2f(sfmlMin.x, sfmlMax.y));
+                    aabbRect.setOutlineThickness(1);
+                    aabbRect.setFillColor(sf::Color::Transparent);
+                    
                     // 默认红色
-                    OxyRender::OxyColor aabbColor{1.0f, 0.0f, 0.0f, 1.0f};
+                    sf::Color aabbColor(255, 0, 0);
 
                     // 检查是否在碰撞对中改成蓝色
                     for (auto &pair : data.collisionPairs)
                     {
                         if (pair.a == data.entityId || pair.b == data.entityId)
                         {
-                            aabbColor = {0.0f, 0.0f, 1.0f, 1.0f};
+                            aabbColor = sf::Color(0, 0, 255);
                             break;
                         }
                     }
-                    m_graphics.drawPolygonOutline(aabbVerts, aabbColor);
+                    aabbRect.setOutlineColor(aabbColor);
+                    m_window.draw(aabbRect);
                 }
+                
                 switch (data.shapeType)
                 {
                 case ShapeType::Circle:
-                    m_graphics.drawCircle(pos.x, pos.y, data.circleRadius, color);
-                    break;
+                {
+                    sf::CircleShape circle(data.circleRadius);
+                    circle.setPosition(sf::Vector2f(sfmlPos.x - data.circleRadius, sfmlPos.y - data.circleRadius));
+                    circle.setFillColor(color);
+                    m_window.draw(circle);
+                }
+                break;
 
                 case ShapeType::Box:
                 {
                     float halfSize = data.boxSize * 0.5f;
-                    std::vector<MathLite::Vec2> vertices = {
+                    std::vector<OxygenMathLite::Vec2> vertices = {
                         {-halfSize, -halfSize}, {halfSize, -halfSize}, {halfSize, halfSize}, {-halfSize, halfSize}};
-                    std::vector<MathLite::Vec2> worldVertices;
-                    for (auto &v : vertices)
+                    
+                    sf::ConvexShape box;
+                    box.setPointCount(4);
+                    
+                    for (size_t i = 0; i < vertices.size(); ++i)
                     {
-                        float x = v.x * cosTheta - v.y * sinTheta + pos.x;
-                        float y = v.x * sinTheta + v.y * cosTheta + pos.y;
-                        worldVertices.push_back({x, y});
+                        // 应用旋转和位置变换
+                        float x = vertices[i].x * cosTheta - vertices[i].y * sinTheta + pos.x;
+                        float y = vertices[i].x * sinTheta + vertices[i].y * cosTheta + pos.y;
+                        
+                        // 转换到SFML坐标系
+                        box.setPoint(i, sf::Vector2f(m_window.getSize().x / 2 + x, m_window.getSize().y / 2 - y));
                     }
-                    m_graphics.drawPolygon(worldVertices, color);
+                    box.setFillColor(color);
+                    m_window.draw(box);
                 }
                 break;
 
                 case ShapeType::Polygon:
                 {
-                    std::vector<MathLite::Vec2> worldVertices;
-                    for (auto &v : data.polygonVertices)
+                    sf::ConvexShape polygon;
+                    polygon.setPointCount(data.polygonVertices.size());
+                    
+                    for (size_t i = 0; i < data.polygonVertices.size(); ++i)
                     {
-                        float x = v.x * cosTheta - v.y * sinTheta + pos.x;
-                        float y = v.x * sinTheta + v.y * cosTheta + pos.y;
-                        worldVertices.push_back({x, y});
+                        // 应用旋转和位置变换
+                        float x = data.polygonVertices[i].x * cosTheta - data.polygonVertices[i].y * sinTheta + pos.x;
+                        float y = data.polygonVertices[i].x * sinTheta + data.polygonVertices[i].y * cosTheta + pos.y;
+                        
+                        // 转换到SFML坐标系
+                        polygon.setPoint(i, sf::Vector2f(m_window.getSize().x / 2 + x, m_window.getSize().y / 2 - y));
                     }
-                    m_graphics.drawPolygon(worldVertices, color);
+                    polygon.setFillColor(color);
+                    m_window.draw(polygon);
                 }
                 break;
                 }
             }
         }
 
+        // 设置是否显示AABB
+        void SetAABBDraw(bool draw) { m_AABBDraw = draw; }
+
     private:
         PhysicsThread &m_simulation;
-        bool AABBDraw;
-        Graphics2D &m_graphics;
+        sf::RenderWindow &m_window;
+        bool m_AABBDraw;
 
         float hashToFloat(uint32_t id)
         {
