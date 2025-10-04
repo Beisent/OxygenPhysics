@@ -10,8 +10,11 @@ using namespace OxygenMathLite;
 
 int main()
 {
-    // 创建SFML窗口
-    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 600)), "OxygenPhysics with SFML");
+    // 创建SFML窗口 - 开启抗锯齿
+    sf::ContextSettings settings;
+    settings.antiAliasingLevel = 8; // 设置抗锯齿级别
+    
+    sf::RenderWindow window(sf::VideoMode(sf::Vector2u(800, 600)), "OxygenPhysics with SFML", sf::Style::Default, sf::State::Windowed, settings);
     window.setFramerateLimit(120);
 
     // 创建物理模拟系统
