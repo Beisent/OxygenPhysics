@@ -60,8 +60,8 @@ int main()
                 window.close();
         }
 
-        // 清除窗口
-        window.clear(sf::Color::Black);
+        // 清除窗口 - 使用偏白色的灰色背景
+        window.clear(sf::Color(240, 240, 240));
 
         // 绘制物理世界中的物体
         debugDraw.Draw();

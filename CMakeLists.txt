@@ -38,11 +38,11 @@ add_executable(OxygenPhysicsExample ${SOURCES})
 if(WIN32)
     # Windows平台
     target_link_libraries(OxygenPhysicsExample
-        ${CMAKE_SOURCE_DIR}/lib/libsfml-graphics-s.a
-        ${CMAKE_SOURCE_DIR}/lib/libsfml-window-s.a
-        ${CMAKE_SOURCE_DIR}/lib/libsfml-system-s.a
+        ${VENDOR_DIR}/SFML/lib/libsfml-graphics-s.a
+        ${VENDOR_DIR}/SFML/lib/libsfml-window-s.a
+        ${VENDOR_DIR}/SFML/lib/libsfml-system-s.a
         opengl32
-        ${CMAKE_SOURCE_DIR}/lib/libfreetype.a
+        ${VENDOR_DIR}/SFML/lib/libfreetype.a
         winmm
         gdi32
         pthread
