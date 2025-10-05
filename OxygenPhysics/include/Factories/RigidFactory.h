@@ -11,6 +11,7 @@ namespace OxyPhysics
         Vec2 position{0, 0};
         real angle{0};
         Vec2 velocity{0, 0};
+        real angularVelocity{0};
         real mass{1.0};
         bool isStatic{false};
     };
@@ -22,7 +23,7 @@ namespace OxyPhysics
             auto e = registry.create();
 
             registry.emplace<Components::TransformComponent>(e, def.position, def.angle);
-            registry.emplace<Components::VelocityComponent>(e, def.velocity);
+            registry.emplace<Components::VelocityComponent>(e, def.velocity,def.angularVelocity);
             
             Components::MassComponent massComp;
             massComp.mass = def.mass;

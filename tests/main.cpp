@@ -29,11 +29,12 @@ int main()
     BodyDef Body;
     Body.position = OxygenMathLite::Vec2(-350 , -50);
     Body.velocity = OxygenMathLite::Vec2(50, 0);
+    Body.angularVelocity = 10.0f;
     Body.angle = 30.0;
     Body.mass = 1.0;
     Body.isStatic = false;
 
-    world.CreateRigid(Body, ShapeFactory::CreatePolygon({{0,50},{-50,-50},{50,-50}}));
+    world.CreateRigid(Body, ShapeFactory::CreatePolygon({{-50,50},{-50,-50},{50,-50},{50,50}}));
     // 创建物体以测试多线程
     for (int i = 0; i < 5; i++)
     {
