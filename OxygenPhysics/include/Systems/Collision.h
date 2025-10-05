@@ -1,13 +1,19 @@
 ﻿#pragma once
-#include "Components.h"
+#include "Components/Components.h"
+#include "Common/OxygenMathLite.h"
+#include "Common/GeometryTools.h"
 #include <entt/entt.hpp>
 #include <vector>
 
 namespace OxyPhysics
 {
-   
+    namespace Components
+    {
+        struct CollisionPair;
+        struct ContactManifold;
+    }
 
-       // 粗检测，用于快速排除无用的检测
+    // 粗检测，用于快速排除无用的检测
     class BroadPhase
     {
     public:
@@ -25,4 +31,5 @@ namespace OxyPhysics
     public:
         void findPairs(entt::registry &reg, std::vector<Components::CollisionPair> &pairs) override;
     };
+
 }

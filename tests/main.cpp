@@ -1,7 +1,7 @@
 ﻿#include "PhysicsThread.h"
 #include "Factories/Factories.h"
 #include "Common/OxygenMathLite.h"
-#include "draw.h"
+#include "Rendering/RenderBackend.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -47,8 +47,8 @@ int main()
         world.CreateRigid(Body, ShapeFactory::CreateCircle(50.0));
     }
 
-    // 创建调试渲染器 - 使用SFML窗口
-    PhysicsDebugDraw debugDraw(simulation, window);
+    // 使用Rendering架构创建调试渲染器 - 使用SFML窗口
+    auto debugDraw = RenderBackendFactory::Create(RenderBackendType::SFML, simulation, &window);
 
     // 主循环
     sf::Clock clock;
@@ -64,8 +64,8 @@ int main()
         // 清除窗口 - 使用偏白色的灰色背景
         window.clear(sf::Color(240, 240, 240));
 
-        // 绘制物理世界中的物体
-        debugDraw.Draw();
+        // 使用Rendering架构绘制物理世界中的物体
+        debugDraw->DrawFromSimulation();
 
         // 显示窗口内容
         window.display();
